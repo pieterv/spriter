@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+
+	<title>Wind Millz Yo!</title>
+
+	<style>
+
+		.windmill {
+			position: absolute;
+			bottom: 0;
+			left: 20px;
+			width: 250px;
+			height: 250px;
+			background: transparent url("images/windmill_large.png") no-repeat 0 0;
+			margin-left: -40px;
+		}
+			.windmill:hover {
+				background-color: rgba(255, 0, 0, 0.05);
+				cursor: pointer;
+			}
+			.windmill:hover:after {
+				position: absolute;
+				content: '';
+				left: 0;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				border: 1px solid rgba(255, 0, 0, 0.4);
+			}
+
+		#Main {
+			position: relative;
+			height: 300px;
+		}
+			.wm2 {
+				left: 80px;
+				bottom: 32px;
+			}
+			.wm3 {
+				left: 50px;
+				bottom: 60px;
+			}
+			.wm4 {
+				left: 230px;
+				bottom: 5px;
+			}
+			.wm5 {
+				left: 170px;
+				bottom: 45px;
+			}
+			.wm6 {
+				left: 250px;
+				bottom: 90px;
+			}
+			.ground {
+				position: absolute;
+				left: 0;
+				width: 500px;
+				bottom: 0;
+				height: 150px;
+				background-color: #B3FF00;
+				-webkit-transform: skew(-45deg, 0deg);
+				background-image: -webkit-radial-gradient(55% 26%, circle farthest-corner, #B3FF00 0%,#8AC400 100%);
+				-webkit-box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.5);
+			}
+	</style>
+
+	<script src="../vendor/requirejs/require.js"></script>
+	<script>
+		requirejs.config( {
+
+			// baseUrl: '',
+			urlArgs: 'bust=' + ( new Date() ).getTime(), // Pop that cache
+
+			paths: {
+				'domReady': '../vendor/requirejs/plugins/domReady'
+			},
+
+			packages: [
+				{ name: 'spriter', location: '../src', main: 'spriter' },
+				{ name: 'jquery', location: '../vendor/jquery', main: 'jquery-1.7.2' }
+			]
+
+		} );
+
+		require( [
+			'spriter',
+			'jquery',
+			'domReady!'
+		], function( spriter, $ ) {
+
+			var rand = function(min, max) {
+							return Math.random() * (max - min) + min;
+						};
+
+			var animation = spriter( { 
+				fps: 40,
+				frames: 31,
+				offset: { x: 250 },
+				start: { x: 0 }
+			} );
+
+			$( '.windmill' ).each( function( i, el ) {
+
+				var running = true,
+					sprite = animation.create( el ).fps( rand(10, 100) ).start();
+
+				$( el ).on( 'click', function( e ) {
+					e.preventDefault();
+
+					if ( running ) sprite.stop();
+					else sprite.start();
+
+					running = !running;
+
+					// console.log( window.getComputedStyle( el ) );
+					// console.log( el.style );
+				} )
+			} );
+
+		} );
+	</script>
+
+	<script>
+		// jQuery(function($) {
+		// 	var $windmill = $('.windmill'),
+		// 			sps = [],
+		// 			rand = function(min, max) {
+		// 							return Math.random() * (max - min) + min;
+		// 						};
+
+		// 	$windmill.each(function() {
+		// 		var fps = rand(35, 60),
+		// 				sprite = spriter.create( this, {
+		// 							fps: fps,
+		// 							frames: 31,
+		// 							offset: {x: 250}
+		// 						} ).start();
+
+		// 		$( this ).bind( {
+		// 			'mouseover': function() {
+
+		// 				sprite.fps( 100 );
+
+		// 			},
+		// 			'mouseout': function() {
+
+		// 				sprite.fps( fps );
+
+		// 			}
+		// 		} );
+
+		// 		sps.push(sprite);
+		// 	});
+
+		// 	var isOn = true;
+		// 	$('.onoff').bind({
+		// 		'click': function(e) {
+		// 			e.preventDefault();
+		// 			if (isOn) spriter.stop();
+		// 			else spriter.start();
+		// 			isOn = !isOn;
+		// 		}
+		// 	});
+
+		// 	spriter.start();
+		// });
+	</script>
+
+</head>
+<body>
+	<div id="Container">
+		<header>
+			<h1>Wind mill test!</h1>
+			<a class="onoff" href="#toggle">Toggle on/off</a>
+		</header>
+
+		<div id="Main" role="main">
+
+			<div class="ground"><!-- --></div>
+
+			<div class="windmill wm3"><!-- --></div>
+			<div class="windmill wm2"><!-- --></div>
+			<div class="windmill wm1"><!-- --></div>
+			<div class="windmill wm5"><!-- --></div>
+			<div class="windmill wm6"><!-- --></div>
+			<div class="windmill wm4"><!-- --></div>
+
+		</div>
+
+		<footer>
+		</footer>
+	</div>
+
+</body>
+</html>
